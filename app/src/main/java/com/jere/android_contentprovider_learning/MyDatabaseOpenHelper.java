@@ -32,8 +32,9 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
             USER_ADDRESS
     };
 
-    //work table columns
+    //score table columns
     public static final String SCORE_ID = "_id";
+    public static final String SCORE_STUDENT_NAME = "name";
     public static final String SCORE_MATH = "math";
     public static final String SCORE_CHINESE = "chinese";
     public static final String SCORE_ENGLISH = "english";
@@ -41,6 +42,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public static final String[] SCORE_ALL_COLUMNS = new String[] {
             SCORE_ID,
+            SCORE_STUDENT_NAME,
             SCORE_MATH,
             SCORE_CHINESE,
             SCORE_ENGLISH,
@@ -54,7 +56,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
 
     //create work table sq;
     private static final String CREATE_SCORE_TABLE = "create table " + TABLE_SCORE + "("
-            + SCORE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SCORE_MATH + " INT, " + SCORE_CHINESE
+            + SCORE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SCORE_STUDENT_NAME + " TEXT, " + SCORE_MATH + " INT, " + SCORE_CHINESE
             + " INT, " + SCORE_ENGLISH + " INT, " + SCORE_SCIENCE + " INT);";
 
     public MyDatabaseOpenHelper(Context context) {
