@@ -17,14 +17,16 @@ import androidx.annotation.Nullable;
  */
 public class MyContentProvider extends ContentProvider {
     private static final String AUTHORITY = "com.jere.android_contentprovider_learning";
-    private static final String BASE_PATH = "jereTest";
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+    public static final Uri USER_TABLE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + MyDatabaseOpenHelper.TABLE_USER);
+    public static final Uri SCORE_TABLE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + MyDatabaseOpenHelper.TABLE_SCORE);
 
-    public static final int USER_CODE = 1;
+    public static final int USER_TABLE_CODE = 1;
+    public static final int SCORE_TABLE_CODE = 2;
+
     private static final UriMatcher uriMatch = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
-        uriMatch.addURI(AUTHORITY, BASE_PATH, USER_CODE);
+        uriMatch.addURI(AUTHORITY, MyDatabaseOpenHelper.TABLE_USER, USER_TABLE_CODE);
+        uriMatch.addURI(AUTHORITY, MyDatabaseOpenHelper.TABLE_SCORE, SCORE_TABLE_CODE);
     }
 
     private SQLiteDatabase sqLiteDatabase;
@@ -46,10 +48,21 @@ public class MyContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor = null;
         switch (uriMatch.match(uri)) {
-            case USER_CODE:
-                cursor = sqLiteDatabase.query(MyDatabaseOpenHelper.TABLE_NAME_USER,
+            case USER_TABLE_CODE:
+                cursor = sqLiteDatabase.query(MyDatabaseOpenHelper.TABLE_USER,
                         MyDatabaseOpenHelper.USER_ALL_COLUMNS,
-                        null, null, null, null, null);
+                        selection,
+                        selectionArgs,
+                        sortOrder,
+                        null, null);
+                break;
+            case SCORE_TABLE_CODE:
+                cursor = sqLiteDatabase.query(MyDatabaseOpenHelper.TABLE_SCORE,
+                        MyDatabaseOpenHelper.SCORE_ALL_COLUMNS,
+                        selection,
+                        selectionArgs,
+                        sortOrder,
+                        null, null);
                 break;
             default:
                 throw new IllegalArgumentException("unKnow uri : " + uri);
@@ -69,7 +82,7 @@ public class MyContentProvider extends ContentProvider {
         String tableName = getTableNameByUri(uri);
         long rowId = sqLiteDatabase.insert(tableName, "" , values);
         if (rowId > 0) {
-            Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, rowId);
+            Uri uri1 = ContentUris.withAppendedId(USER_TABLE_CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(uri1, null);
             return uri1;
         }
@@ -80,8 +93,11 @@ public class MyContentProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         int count = 0;
         switch (uriMatch.match(uri)) {
-            case USER_CODE:
-                count = sqLiteDatabase.delete(BASE_PATH, selection, selectionArgs);
+            case USER_TABLE_CODE:
+                count = sqLiteDatabase.delete(MyDatabaseOpenHelper.TABLE_USER, selection, selectionArgs);
+                break;
+            case SCORE_TABLE_CODE:
+                count = sqLiteDatabase.delete(MyDatabaseOpenHelper.TABLE_SCORE, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("unknow uri: " + uri);
@@ -94,8 +110,11 @@ public class MyContentProvider extends ContentProvider {
                       @Nullable String selection, @Nullable String[] selectionArgs) {
         int count = 0;
         switch (uriMatch.match(uri)) {
-            case USER_CODE:
-                count = sqLiteDatabase.update(BASE_PATH, values, selection, selectionArgs);
+            case USER_TABLE_CODE:
+                count = sqLiteDatabase.update(MyDatabaseOpenHelper.TABLE_USER, values, selection, selectionArgs);
+                break;
+            case SCORE_TABLE_CODE:
+                count = sqLiteDatabase.update(MyDatabaseOpenHelper.TABLE_SCORE, values, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("unknow uri: " + uri);
@@ -107,8 +126,11 @@ public class MyContentProvider extends ContentProvider {
     private String getTableNameByUri(Uri uri) {
         String tableName;
         switch (uriMatch.match(uri)) {
-            case USER_CODE:
-                tableName = MyDatabaseOpenHelper.TABLE_NAME_USER;
+            case USER_TABLE_CODE:
+                tableName = MyDatabaseOpenHelper.TABLE_USER;
+                break;
+            case SCORE_TABLE_CODE:
+                tableName = MyDatabaseOpenHelper.TABLE_SCORE;
                 break;
             default:
                 throw new IllegalArgumentException("unknow uri: " + uri);

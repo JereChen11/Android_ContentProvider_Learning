@@ -17,7 +17,7 @@
 //public class UsersProvider extends ContentProvider {
 //    static final String PROVIDER_NAME = "com.tutlane.contentprovider.UserProvider";
 //    static final String URL = "content://" + PROVIDER_NAME + "/users";
-//    static final Uri CONTENT_URI = Uri.parse(URL);
+//    static final Uri USER_TABLE_CONTENT_URI = Uri.parse(URL);
 //
 //    static final String id = "id";
 //    static final String name = "name";
@@ -78,7 +78,7 @@
 //    public Uri insert(Uri uri, ContentValues values) {
 //        long rowID = db.insert(TABLE_NAME, "", values);
 //        if (rowID > 0) {
-//            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+//            Uri _uri = ContentUris.withAppendedId(USER_TABLE_CONTENT_URI, rowID);
 //            getContext().getContentResolver().notifyChange(_uri, null);
 //            return _uri;
 //        }
