@@ -23,7 +23,7 @@ public class MyContentProvider extends ContentProvider {
     public static final int USER_TABLE_CODE = 1;
     public static final int SCORE_TABLE_CODE = 2;
 
-    private static final UriMatcher uriMatch = new UriMatcher(UriMatcher.NO_MATCH);
+    public static final UriMatcher uriMatch = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         uriMatch.addURI(AUTHORITY, MyDatabaseOpenHelper.TABLE_USER, USER_TABLE_CODE);
         uriMatch.addURI(AUTHORITY, MyDatabaseOpenHelper.TABLE_SCORE, SCORE_TABLE_CODE);
